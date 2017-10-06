@@ -1,0 +1,9 @@
+{
+    "path" : "~/Documents/HousePrices",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

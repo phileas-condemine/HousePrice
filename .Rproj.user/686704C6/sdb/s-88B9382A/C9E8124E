@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(keras)\n\nmax_words <- 1000\nbatch_size <- 32\nepochs <- 5\n\ncat('Loading data...\\n')\nreuters <- dataset_reuters(num_words = max_words, test_split = 0.2)\nx_train <- reuters$train$x\ny_train <- reuters$train$y\nx_test <- reuters$test$x\ny_test <- reuters$test$y\n\ncat(length(x_train), 'train sequences\\n')\ncat(length(x_test), 'test sequences\\n')\n\nnum_classes <- max(y_train) + 1\ncat(num_classes, '\\n')\n\ncat('Vectorizing sequence data...\\n')\n\ntokenizer <- text_tokenizer(num_words = max_words)\nx_train <- sequences_to_matrix(tokenizer, x_train, mode = 'binary')\nx_test <- sequences_to_matrix(tokenizer, x_test, mode = 'binary')\n\ncat('x_train shape:', dim(x_train), '\\n')\ncat('x_test shape:', dim(x_test), '\\n')\n\ncat('Convert class vector to binary class matrix',\n    '(for use with categorical_crossentropy)\\n')\ny_train <- to_categorical(y_train, num_classes)\ny_test <- to_categorical(y_test, num_classes)\ncat('y_train shape:', dim(y_train), '\\n')\ncat('y_test shape:', dim(y_test), '\\n')\n\ncat('Building model...\\n')\nmodel <- keras_model_sequential()\nmodel %>%\n  layer_dense(units = 512, input_shape = c(max_words)) %>% \n  layer_activation(activation = 'relu') %>% \n  layer_dropout(rate = 0.5) %>% \n  layer_dense(units = num_classes) %>% \n  layer_activation(activation = 'softmax')\n\nmodel %>% compile(\n  loss = 'categorical_crossentropy',\n  optimizer = 'adam',\n  metrics = c('accuracy')\n)\n\nhistory <- model %>% fit(\n  x_train, y_train,\n  batch_size = batch_size,\n  epochs = epochs,\n  verbose = 1,\n  validation_split = 0.1\n)\n\nscore <- model %>% evaluate(\n  x_test, y_test,\n  batch_size = batch_size,\n  verbose = 1\n)\n\ncat('Test score:', score[[1]], '\\n')\ncat('Test accuracy', score[[2]], '\\n')",
+    "created" : 1507221032224.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3899123437",
+    "id" : "C9E8124E",
+    "lastKnownWriteTime" : 1507221044,
+    "last_content_update" : 1507221044724,
+    "path" : "~/Documents/HousePrices/reuters mlp.R",
+    "project_path" : "reuters mlp.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
